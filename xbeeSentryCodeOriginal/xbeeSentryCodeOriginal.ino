@@ -12,10 +12,6 @@ void setup() {
   delay(500);
 }
 void loop() {
-  /*if(Serial.available()) { // Is serial data available?
-    char outgoing = Serial.read(); // Read character, send to XBee
-    Xbee.print(outgoing);
-}*/
 if (digitalRead(7)){
   char outgoing = 's'; // Read character, send to XBee
     Xbee.print(outgoing);
