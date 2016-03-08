@@ -32,6 +32,26 @@ void setup() {
 
 
 void loop() {
+  /*forward();
+  delay(2000);
+  slightLeft();
+  delay(2000);
+  slightRight();
+  delay(2000);
+  fullLeft();
+  delay(2000);
+  fullRight();
+  delay(2000);
+  reverse();
+  delay(2000);
+  stopMoving();
+  delay(2000);
+  left90();
+  //delay(2000);
+  right90();
+  //delay(2000);
+  turnAround();
+  //delay(2000);*/
   Serial.print("Left");
   Serial.println(RCTime(2));
   Serial.print("Mid");
@@ -39,9 +59,9 @@ void loop() {
   Serial.print("Right");
   Serial.println(RCTime(4));
   
-  leftOnLine = (RCTime(leftQTI)>60);
-    centerOnLine = (RCTime(centerQTI)>70);
-    rightOnLine = (RCTime(rightQTI)>50);
+  leftOnLine = (RCTime(leftQTI)>40);
+    centerOnLine = (RCTime(centerQTI)>40);
+    rightOnLine = (RCTime(rightQTI)>40);
   
   if (!leftOnLine && !centerOnLine && !rightOnLine) {
     reverse();
@@ -56,6 +76,7 @@ void loop() {
   }
   else if (leftOnLine && !centerOnLine && !rightOnLine) {
     fullLeft();
+    
     //Do a slight left, a forward, then a right, then measure again.
   }
   else if (!leftOnLine && centerOnLine && !rightOnLine) {
@@ -63,6 +84,8 @@ void loop() {
   }
   else if (!leftOnLine && !centerOnLine && rightOnLine) {
     fullRight();
+    
+    
     ///Do a slight right here, a forward, then a left, then measure again.
   }
   else if(leftOnLine && centerOnLine && rightOnLine) {
@@ -70,7 +93,7 @@ void loop() {
   }
   else {
       forward();
-  } 
+  }
 }
 
 long RCTime(int sensorIn){
@@ -91,52 +114,34 @@ void forward() {
   servoRight.writeMicroseconds(1443);
   delay(50);
 }
-void forward1() {
-  servoLeft.writeMicroseconds(1443);
-  servoRight.writeMicroseconds(1557);
-  delay(250);
-}
-void forwardSlow() {
-  servoLeft.writeMicroseconds(1475);
-  servoRight.writeMicroseconds(1522);
-}
 void slightLeft() {
-  servoLeft.writeMicroseconds(1450);
-  servoRight.writeMicroseconds(1500);
+  servoLeft.writeMicroseconds(1500);
+  servoRight.writeMicroseconds(1450);
 }
 void slightRight() {
-  servoLeft.writeMicroseconds(1500);
-  servoRight.writeMicroseconds(1550);
+  servoLeft.writeMicroseconds(1550);
+  servoRight.writeMicroseconds(1500);
 }
 void fullLeft() {
-  servoLeft.writeMicroseconds(1550);
-  servoRight.writeMicroseconds(1550);
-}
-void fullRight() {
   servoLeft.writeMicroseconds(1450);
   servoRight.writeMicroseconds(1450);
+}
+void fullRight() {
+  servoLeft.writeMicroseconds(1550);
+  servoRight.writeMicroseconds(1550);
 }
 void reverse() {
   servoLeft.writeMicroseconds(1300);
   servoRight.writeMicroseconds(1700);
-}
-void reverseSlow() {
-  servoLeft.writeMicroseconds(1525);
-  servoRight.writeMicroseconds(1475);
 }
 void stopMoving() {
   servoLeft.writeMicroseconds(1500);
   servoRight.writeMicroseconds(1500);
 }
 void left90() {
-  servoLeft.writeMicroseconds(1700);
-  servoRight.writeMicroseconds(1700);
-  delay(670);
-}
-void left90more() {
   servoLeft.writeMicroseconds(1300);
   servoRight.writeMicroseconds(1300);
-  delay(735);
+  delay(670);
 }
 void right90() {
   servoLeft.writeMicroseconds(1700);
@@ -147,10 +152,5 @@ void turnAround() {
   servoLeft.writeMicroseconds(1700);
   servoRight.writeMicroseconds(1700);
   delay(1350);
-}
-void turnAroundmore() {
-  servoLeft.writeMicroseconds(1700);
-  servoRight.writeMicroseconds(1700);
-  delay(1500);
 }
 
