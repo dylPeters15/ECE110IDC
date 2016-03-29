@@ -51,7 +51,7 @@ digitalWrite(7,HIGH);
 digitalWrite(8,HIGH);
 digitalWrite(9,HIGH);
 
-delay(100000);
+//delay(100000);
 
  
   Serial.begin(9600);
