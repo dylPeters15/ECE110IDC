@@ -1,18 +1,19 @@
 #include <Servo.h>
-
-
 #include <SoftwareSerial.h>
 
-
-
-#define Rx 8 // DOUT to pin 10
+const int leftQTI = 2;
+const int centerQTI = 3;
+const int rightQTI = 4;
+const int speaker = 5;
+const int redLED1 = 6;
+const int yellowLED1 = 7;
+const int redLED2 = 8;
+const int yellowLED2 = 9;
+#define Rx 10 // DOUT to pin 10
 #define Tx 11 // DIN to pin 11
-SoftwareSerial Xbee (Rx, Tx);
-
-
-
-const int sio = 10;      // ColorPAL connected to pin 2
+const int sio = 53;      // ColorPAL connected to pin 2
 const int unused = 14;    // Non-existant pin # for SoftwareSerial
+
 const int sioBaud = 4800;
 const int waitDelay = 200;
 
@@ -21,54 +22,59 @@ int red;
 int grn;
 int blu;
 
+SoftwareSerial Xbee (Rx, Tx);
 
 // Set up two software serials on the same pin.
 SoftwareSerial serin(sio, unused);
 SoftwareSerial serout(unused, sio);
 
-
-bool i = true;
 Servo servoLeft;
 Servo servoRight;
-int counter = 0;
-//int measurement = 0;
-const int leftQTI = 2;
-const int centerQTI = 3;
-const int rightQTI = 4;
 
 boolean leftOnLine = 0;
 boolean centerOnLine = 0;
 boolean rightOnLine = 0;
 
 void setup() { 
- 
+ // Setup movement
 
-// Setup movement
+
+pinMode(5,OUTPUT);
+pinMode(6,OUTPUT);
+pinMode(7,OUTPUT);
+pinMode(8,OUTPUT);
+pinMode(9,OUTPUT);
+
+tone(5,5000,1000);
+digitalWrite(6,HIGH);
+digitalWrite(7,HIGH);
+digitalWrite(8,HIGH);
+digitalWrite(9,HIGH);
+
+delay(100000);
+
+ 
   Serial.begin(9600);
   servoLeft.attach(13);
   servoRight.attach(12);
-
   delay(200);
-  
-  
 }
 
 
 void loop() {
 
-   Serial.print("Left");
-Serial.println(RCTime(2));
-Serial.print("Mid");
-  Serial.println(RCTime(3));
-  Serial.print("Right");
+   Serial.print("Left  ");
+  Serial.print(RCTime(2));
+  Serial.print("  Mid  ");
+  Serial.print(RCTime(3));
+  Serial.print("  Right  ");
   Serial.println(RCTime(4));
   
   
-  leftOnLine = (RCTime(leftQTI)>30);
+    leftOnLine = (RCTime(leftQTI)>30);
     centerOnLine = (RCTime(centerQTI)>30);
     rightOnLine = (RCTime(rightQTI)>30);
    
- //while (i==true){
   if (!leftOnLine && !centerOnLine && !rightOnLine) {
     forward();
   } 
@@ -98,16 +104,15 @@ Serial.print("Mid");
        servoRight.detach();
        servoLeft.detach();
        senseColor();
-       // i = false;
   }
   else {
       forward();
   }
- // }
 }
 
 void senseColor(){
   Serial.begin(9600);
+  Xbee.begin(9600); // type a char, then hit enter
   reset();          // Send reset to ColorPal
   serout.begin(sioBaud);
   pinMode(sio, OUTPUT);
@@ -117,10 +122,17 @@ void senseColor(){
   serin.begin(sioBaud);         // Set up serial port for receiving
   pinMode(sio, INPUT);
 
-  Xbee.begin(9600); // type a char, then hit enter
+  
   while (true){
     readData();
-    
+    if (Xbee.available()){
+      Serial.println(Xbee.read());
+      delay(100);
+    }
+    if (Serial.available()){
+      Xbee.println(Serial.read());
+      delay(100);
+    }
   }
 }
 
@@ -140,8 +152,10 @@ void reset() {
 
 void readData() {
   char buffer[32];
-  
+  //Serial.println("asdf");
+  //printColor();
   if (serin.available() > 0) {
+    
     // Wait for a $ character, then read three 3 digit hex numbers
     buffer[0] = serin.read();
     if (buffer[0] == '$') {
@@ -163,20 +177,16 @@ void parseAndPrint(char * data) {
   char buffer[32];
   sprintf(buffer, "R%4.4d G%4.4d B%4.4d", red, grn, blu);
   //Serial.println(buffer);
-  //Serial.print("red: ");
   Serial.print(red);
   Serial.print("   ");
-  //Serial.print("Green: ");
-  
   Serial.print(grn);
   Serial.print("   ");
-  //Serial.print("Blue: ");
   Serial.println(blu);
-
   printColor();
 }
 
 void printColor(){
+  
   if (red <= 75 && grn <= 45 && blu <= 75){
     Serial.println("black (bronze)");
     Xbee.println("b");
@@ -187,8 +197,8 @@ void printColor(){
     Serial.println("White (gold)");
     Xbee.println("w");
   } else {
-    //Serial.println("Unknown color");
-    //Xbee.println("unknown color");
+    Serial.println("Unknown color");
+    Xbee.println("u");
   }
   delay(100);
 }
@@ -206,6 +216,7 @@ long RCTime(int sensorIn){
    }
    return duration;
 }
+
 void forward() {
   servoLeft.writeMicroseconds(1557);
   servoRight.writeMicroseconds(1443);
