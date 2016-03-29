@@ -5,16 +5,15 @@
 SoftwareSerial Xbee (Rx, Tx);
 
 void setup() {
-  pinMode(7,INPUT);
   pinMode(5,OUTPUT);
   Serial.begin(9600); // Set to No line ending;
   Xbee.begin(9600); // type a char, then hit enter
   delay(500);
 }
 void loop() {
-if (digitalRead(7)){
+if (Serial.available()){
   char outgoing = 's'; // Read character, send to XBee
-    Xbee.print(outgoing);
+    Xbee.print(Serial.read());
 }
   if(Xbee.available()) { // Is data available from XBee?
     char incoming = Xbee.read(); // Read character,
