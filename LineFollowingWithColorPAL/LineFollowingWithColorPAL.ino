@@ -38,13 +38,13 @@ boolean rightOnLine = 0;
 void setup() { 
  // Setup movement
 
-/*
+
 pinMode(5,OUTPUT);
 pinMode(6,OUTPUT);
 pinMode(7,OUTPUT);
 pinMode(8,OUTPUT);
 pinMode(9,OUTPUT);
-
+/*
 tone(5,5000,1000);
 digitalWrite(6,HIGH);
 digitalWrite(7,HIGH);
@@ -190,15 +190,47 @@ void printColor(){
   if (red <= 75 && grn <= 45 && blu <= 75){
     Serial.println("black (bronze)");
     Xbee.println("b");
+    digitalWrite(6,HIGH);
+    digitalWrite(7,HIGH);
+    digitalWrite(8,HIGH);
+    digitalWrite(9,LOW);
+    Xbee.begin(9600);
+    while (true){
+      Xbee.println("b");
+    }
   } else if (red > 75 && red <= 175 && grn > 45 && grn <= 125 && blu > 75 && blu <= 225){
     Serial.println("Grey (silver)");
     Xbee.println("g)");
+    digitalWrite(6,HIGH);
+    digitalWrite(7,HIGH);
+    digitalWrite(8,LOW);
+    digitalWrite(9,LOW);
+    Xbee.begin(9600);
+    while (true){
+      Xbee.println("g");
+    }
   } else if (red > 175 && grn > 125 && blu > 225){
     Serial.println("White (gold)");
     Xbee.println("w");
+    digitalWrite(6,HIGH);
+    digitalWrite(7,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(9,LOW);
+    Xbee.begin(9600);
+    while (true){
+      Xbee.println("w");
+    }
   } else {
     Serial.println("Unknown color");
     Xbee.println("u");
+    digitalWrite(6,HIGH);
+    digitalWrite(7,HIGH);
+    digitalWrite(8,HIGH);
+    digitalWrite(9,HIGH);
+    Xbee.begin(9600);
+    while (true){
+      Xbee.println("black");
+    }
   }
   delay(100);
 }
