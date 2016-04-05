@@ -38,7 +38,7 @@ boolean rightOnLine = 0;
 void setup() { 
  // Setup movement
 
-
+/*
 pinMode(5,OUTPUT);
 pinMode(6,OUTPUT);
 pinMode(7,OUTPUT);
@@ -50,7 +50,7 @@ digitalWrite(6,HIGH);
 digitalWrite(7,HIGH);
 digitalWrite(8,HIGH);
 digitalWrite(9,HIGH);
-
+*/
 //delay(100000);
 
  
