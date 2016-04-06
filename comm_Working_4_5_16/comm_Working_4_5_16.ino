@@ -1,42 +1,28 @@
 #include <SoftwareSerial.h>
-#define Rx 10 // DOUT to pin 10
-#define Tx 11 // DIN to pin 11
+#define Rx 11 // DOUT to pin 11
+#define Tx 10 // DIN to pin 10
 
 SoftwareSerial Xbee (Rx, Tx);
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  Serial.println("Begin");
-  plebian();
-  //master();
+  pinMode(4, OUTPUT);
+  master();
   //plebian();
-//  Xbee.begin(9600);
-//  char toSend = 'G';
-//  for (int i = 0; i < 100000; i++){
-//    Xbee.print(toSend);
-//  }
-  Serial.println("Done");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
-//    if (in == 1){
-//      int toSend = 155;
-//      Xbee.print(toSend);
-//      Serial.println("printed 155");
-//    }
- // }
 }
 
 void plebian(){
   Xbee.begin(9600);
-  char myResult = 'G';
-  char myGroupNum = '1';
+  char myResult = 'S';
+  char myGroupNum = '2';
   boolean received = false;
   unsigned long start = millis();
-  unsigned long timeOut = 10000;
+  unsigned long timeOut = 60000;
   while (!received&&millis()-start<timeOut){
     if (Xbee.available()){
       char in = Xbee.read();
@@ -57,22 +43,25 @@ void master(){
   int myGroupNum = 3;
   boolean received = false;
   unsigned long startTime = millis();
-  unsigned long timeOut = 60000;
+  unsigned long timeOut = 10000;
   for (int i = 1; i <= numGroups; i++){
     received = false;
     if (i != myGroupNum){
       startTime = millis();
-      while (!received&&millis()-startTime<timeOut){
+      while (!received && millis()-startTime<timeOut){
         Xbee.print(i);
+        delay(150);
         if (Xbee.available()){
           char charReceived = Xbee.read();
-          received = true;
-          if (charReceived == 'G'){
+            received = true;
+            if (charReceived == 'G'){
+            digitalWrite(4, HIGH);
             total += 2;
           } else if (charReceived == 'S'){
             total += 1;
           } else { //charReceived == 'B'
             total += 0;
+            //Serial.println("It sent a B");
           }
           Serial.print("Char received: ");
           Serial.println(charReceived);
@@ -80,10 +69,7 @@ void master(){
       }
     }
   }
-
-  //add our own result
-  
-  
+  Serial.println("At end of for loop");
   total %= 3;
   Serial.print("Final Result Sent: ");
   if (total == 0){ //bronze, dance
