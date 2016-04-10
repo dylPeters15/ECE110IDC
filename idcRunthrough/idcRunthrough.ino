@@ -129,6 +129,9 @@ boolean centerOnLine = 0;
 boolean rightOnLine = 0;
 
 
+ const int TxPin = 51;
+ SoftwareSerial mySerial = SoftwareSerial(255,TxPin);
+
 int melody[] = {
   NOTE_E7, NOTE_E7, 0, NOTE_E7,
   0, NOTE_C7, NOTE_E7, 0,
@@ -226,13 +229,14 @@ int underworld_tempo[] = {
   10, 10, 10,
   3, 3, 3
 };
- 
+
 
 
 void setup() { 
  // Setup movement
 
-
+pinMode(TxPin, OUTPUT);
+digitalWrite(TxPin,HIGH);
 pinMode(5,OUTPUT);
 pinMode(6,OUTPUT);
 pinMode(7,OUTPUT);
@@ -377,25 +381,59 @@ void parseAndPrint(char * data) {
 void printColor(){
   
   if (red <= 75 && grn <= 45 && blu <= 75){
+    mySerial.begin(9600);
+  delay(100);
+  mySerial.write(12);                 // Clear             
+  mySerial.write(17);                 // Turn backlight on
+  delay(5);         
+  mySerial.print("Black");
+  mySerial.write(13);
     Serial.println("black (bronze)");
-    Xbee.begin(9600);
-    plebian('G');
-    //master('G');
-  } else if (red > 75 && red <= 175 && grn > 45 && grn <= 125 && blu > 75 && blu <= 225){
-    Serial.println("Grey (silver)");
-    Xbee.begin(9600);
-    plebian('S');
-    //master('S');
-  } else if (red > 175 && grn > 125 && blu > 225){
-    Serial.println("White (gold)");
     Xbee.begin(9600);
     plebian('B');
     //master('B');
+  } else if (red > 75 && red <= 175 && grn > 45 && grn <= 150 && blu > 75 && blu <= 275){ //blue was 225
+    mySerial.begin(9600);
+  delay(100);
+  mySerial.write(12);                 // Clear             
+  mySerial.write(17);                 // Turn backlight on
+  delay(5);         
+  mySerial.print("Grey");
+  mySerial.write(13);
+    Serial.println("Grey (silver)");
+    Xbee.begin(9600);
+    plebian('S');
+    //master('S')
+  } else if (red > 175 && grn > 150 && blu > 275){
+    mySerial.begin(9600);
+  delay(100);
+  mySerial.write(12);                 // Clear             
+  mySerial.write(17);                 // Turn backlight on
+  delay(5);         
+  mySerial.print("White");
+  mySerial.write(13);
+    Serial.println("White (gold)");
+    Xbee.begin(9600);
+    plebian('G');
+    //master('G');
+    
   } else {
+    mySerial.begin(9600);
+  delay(100);
+  mySerial.write(12);                 // Clear             
+  mySerial.write(17);                 // Turn backlight on
+  delay(5);         
+  mySerial.print(red);
+  mySerial.print(" ");
+  mySerial.print(grn);
+  mySerial.print(" ");
+  mySerial.print(blu);
+  mySerial.write(13);
     Serial.println("Unknown color");
     Xbee.begin(9600);
     plebian('B');
     //master('B');
+    
   }
   delay(100);
 }
@@ -417,6 +455,33 @@ void plebian(char myResultIn){
         received = true;
       }
     }
+  }
+  plebianReceive();
+}
+
+void plebianReceive(){
+  Xbee.begin(9600);
+  boolean performed = false;
+  while (!performed){
+    if (Xbee.available()){
+      char in = Xbee.read();
+      if (in == 'D'){
+        mySerial.print("Dance");
+        dance();
+        performed = true;
+      } else if (in == 'L') {
+        mySerial.print("Light");
+        lightShow();
+        performed = true;
+      } else if (in == 'T') {
+        mySerial.print("Sing");
+        sing(1);
+        performed = true;
+      }
+    }
+  }
+  while (true){
+    delay(500);
   }
 }
 

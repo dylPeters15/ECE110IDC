@@ -15,7 +15,6 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 }
-
 void plebian(char myResultIn){
   Xbee.begin(9600);
   char myResult = myResultIn;
@@ -33,6 +32,33 @@ void plebian(char myResultIn){
         received = true;
       }
     }
+  }
+  plebianReceive();
+}
+
+void plebianReceive(){
+  Xbee.begin(9600);
+  boolean performed = false;
+  while (!performed){
+    if (Xbee.available()){
+      char in = Xbee.read();
+      if (in == 'D'){
+        //mySerial.print("Dance");
+        //dance();
+        performed = true;
+      } else if (in == 'L') {
+        //mySerial.print("Light");
+        //lightShow();
+        performed = true;
+      } else if (in == 'T') {
+        //mySerial.print("Sing");
+        //sing(1);
+        performed = true;
+      }
+    }
+  }
+  while (true){
+    delay(500);
   }
 }
 
