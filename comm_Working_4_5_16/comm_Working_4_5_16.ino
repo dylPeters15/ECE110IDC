@@ -8,17 +8,17 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(4, OUTPUT);
-  master();
-  //plebian();
+  master('G');
+  //plebian('G');
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 }
 
-void plebian(){
+void plebian(char myResultIn){
   Xbee.begin(9600);
-  char myResult = 'S';
+  char myResult = myResultIn;
   char myGroupNum = '2';
   boolean received = false;
   unsigned long start = millis();
@@ -36,8 +36,9 @@ void plebian(){
   }
 }
 
-void master(){
+void master(char myResultIn){
   Xbee.begin(9600);
+  char myResult = myResultIn;
   int total = 0;
   int numGroups = 3;
   int myGroupNum = 3;
@@ -70,6 +71,13 @@ void master(){
     }
   }
   Serial.println("At end of for loop");
+  if (myResult == 'G'){
+    total += 2;
+  } else if (myResult = 'S'){
+    total += 1;
+  } else {
+    total += 0;
+  }
   total %= 3;
   Serial.print("Final Result Sent: ");
   if (total == 0){ //bronze, dance
