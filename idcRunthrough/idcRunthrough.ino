@@ -438,48 +438,34 @@ void printColor(){
   delay(100);
 }
 
-void plebian(char myResultIn){
+void plebian(char myResult){
   Xbee.begin(9600);
-  char myResult = myResultIn;
-  char myGroupNum = '2';
-  boolean received = false;
-  unsigned long start = millis();
-  unsigned long timeOut = 60000;
-  while (!received&&millis()-start<timeOut){
+  char myGroupNum = '3';
+  while (true){
     if (Xbee.available()){
       char in = Xbee.read();
       if (in == myGroupNum){
         Xbee.print(myResult);
         Serial.print("int Sent: ");
         Serial.println(myResult);
-        received = true;
-      }
-    }
-  }
-  plebianReceive();
-}
-
-void plebianReceive(){
-  Xbee.begin(9600);
-  boolean performed = false;
-  while (!performed){
-    if (Xbee.available()){
-      char in = Xbee.read();
-      if (in == 'D'){
+      } else if (in == 'D'){
         mySerial.print("Dance");
         dance();
-        performed = true;
+        fullStop();
       } else if (in == 'L') {
         mySerial.print("Light");
         lightShow();
-        performed = true;
+        fullStop();
       } else if (in == 'T') {
         mySerial.print("Sing");
         sing(1);
-        performed = true;
+        fullStop();
       }
     }
   }
+}
+
+void fullStop(){
   while (true){
     delay(500);
   }
