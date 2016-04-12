@@ -380,25 +380,35 @@ void parseAndPrint(char * data) {
 
 void printColor(){
   
-  if (red <= 75 && grn <= 45 && blu <= 75){
+  if (red <= 95 && grn <= 75 && blu <= 145){
     mySerial.begin(9600);
   delay(100);
   mySerial.write(12);                 // Clear             
   mySerial.write(17);                 // Turn backlight on
   delay(5);         
   mySerial.print("Black");
+//  mySerial.print(red);
+//  mySerial.print(" ");
+//  mySerial.print(grn);
+//  mySerial.print(" ");
+//  mySerial.print(blu);
   mySerial.write(13);
     Serial.println("black (bronze)");
     Xbee.begin(9600);
     plebian('B');
     //master('B');
-  } else if (red > 75 && red <= 175 && grn > 45 && grn <= 150 && blu > 75 && blu <= 275){ //blue was 225
+  } else if (red > 95 && red <= 175 && grn > 75 && grn <= 150 && blu > 145 && blu <= 275){ //blue was 225
     mySerial.begin(9600);
   delay(100);
   mySerial.write(12);                 // Clear             
   mySerial.write(17);                 // Turn backlight on
   delay(5);         
   mySerial.print("Grey");
+//  mySerial.print(red);
+//  mySerial.print(" ");
+//  mySerial.print(grn);
+//  mySerial.print(" ");
+//  mySerial.print(blu);
   mySerial.write(13);
     Serial.println("Grey (silver)");
     Xbee.begin(9600);
@@ -422,12 +432,13 @@ void printColor(){
   delay(100);
   mySerial.write(12);                 // Clear             
   mySerial.write(17);                 // Turn backlight on
-  delay(5);         
-  mySerial.print(red);
-  mySerial.print(" ");
-  mySerial.print(grn);
-  mySerial.print(" ");
-  mySerial.print(blu);
+  delay(5);  
+  mySerial.print("Black");       
+//  mySerial.print(red);
+//  mySerial.print(" ");
+//  mySerial.print(grn);
+//  mySerial.print(" ");
+//  mySerial.print(blu);
   mySerial.write(13);
     Serial.println("Unknown color");
     Xbee.begin(9600);
@@ -584,7 +595,7 @@ void left90() {
 void right90() {
   servoLeft.writeMicroseconds(1700);
   servoRight.writeMicroseconds(1700);
-  delay(600);
+  delay(650);
 }
 void spinRight(){
     servoLeft.writeMicroseconds(1700);
