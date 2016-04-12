@@ -28,15 +28,15 @@ void plebian(char myResult){
         Serial.print("int Sent: ");
         Serial.println(myResult);
       } else if (in == 'D'){
-        mySerial.print("Dance");
+        mySerial.print("Dance 00");
         dance();
         fullStop();
       } else if (in == 'L') {
-        mySerial.print("Light");
+        mySerial.print("Light 01");
         lightShow();
         fullStop();
       } else if (in == 'T') {
-        mySerial.print("Sing");
+        mySerial.print("Sing 10");
         sing(1);
         fullStop();
       }

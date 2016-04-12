@@ -386,7 +386,7 @@ void printColor(){
   mySerial.write(12);                 // Clear             
   mySerial.write(17);                 // Turn backlight on
   delay(5);         
-  mySerial.print("Black");
+  mySerial.print("Black 00");
 //  mySerial.print(red);
 //  mySerial.print(" ");
 //  mySerial.print(grn);
@@ -403,7 +403,7 @@ void printColor(){
   mySerial.write(12);                 // Clear             
   mySerial.write(17);                 // Turn backlight on
   delay(5);         
-  mySerial.print("Grey");
+  mySerial.print("Grey 01");
 //  mySerial.print(red);
 //  mySerial.print(" ");
 //  mySerial.print(grn);
@@ -420,7 +420,7 @@ void printColor(){
   mySerial.write(12);                 // Clear             
   mySerial.write(17);                 // Turn backlight on
   delay(5);         
-  mySerial.print("White");
+  mySerial.print("White 10");
   mySerial.write(13);
     Serial.println("White (gold)");
     Xbee.begin(9600);
@@ -433,7 +433,7 @@ void printColor(){
   mySerial.write(12);                 // Clear             
   mySerial.write(17);                 // Turn backlight on
   delay(5);  
-  mySerial.print("Black");       
+  mySerial.print("Black 00");       
 //  mySerial.print(red);
 //  mySerial.print(" ");
 //  mySerial.print(grn);
@@ -460,15 +460,15 @@ void plebian(char myResult){
         Serial.print("int Sent: ");
         Serial.println(myResult);
       } else if (in == 'D'){
-        mySerial.print("Dance");
+        mySerial.print("Dance 00");
         dance();
         fullStop();
       } else if (in == 'L') {
-        mySerial.print("Light");
+        mySerial.print("Light 01");
         lightShow();
         fullStop();
       } else if (in == 'T') {
-        mySerial.print("Sing");
+        mySerial.print("Sing 10");
         sing(1);
         fullStop();
       }
